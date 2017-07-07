@@ -1,0 +1,12 @@
+{
+  "name": "webmodules/view",
+  "webmodules/view": {
+    "js": [
+      "view.js"
+    ],
+    "on": [
+      "webmodules/lazy",
+      "jsutils/file"
+    ]
+  }
+}
