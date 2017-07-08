@@ -6,7 +6,15 @@
     ],
     "on": [
       "webmodules/lazy",
-      "jsutils/file"
+      "jsutils/file","pitana/pitana.js/domevents"
+    ]
+  },
+  "webmodules/view/config": {
+    "js": [
+      "view.config.js"
+    ],
+    "on": [
+      "webmodules/view"
     ]
   }
 }
