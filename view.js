@@ -51,10 +51,10 @@ define({
         THIS.__uuid__ = window.getUUID();
         VIEWS[THIS.__uuid__] = THIS;
         var moduleName = (THIS.name).replace(/\./g, "-");
-        var moduuleId = options.id || ("view-" + viewCounter++ );
-        var $me = options.$$ || jq('<' + TAG_NAME + '>');
-        return jq($me).attr(moduleName, "").attr({
-            id: moduuleId,
+        var $me = options.$$ ? jq(options.$$) :  jq('<' + TAG_NAME + '>');
+        var moduuleId = options.id || $me.attr("id") ||  ("view-" + viewCounter++ );
+        return $me.attr(moduleName, "").attr({
+            id : moduuleId,
             __uuid__: THIS.__uuid__
         });
     };
@@ -80,7 +80,7 @@ define({
             if (arguments.length == 0) {
                 return this.$$;
             }
-            return this.$$.find.apply(this.arguments);
+            return this.$$.find.apply(this.$$, arguments);
         },
         endView: function () {
             var self = this;
@@ -107,13 +107,19 @@ define({
             delete VIEWS[self.__uuid__];
         },
         _ready_: function () {
-            jq.fn.initView = function (mod, options) {
+            jq.fn.addView = function (mod, options) {
                 var $context = jq(this);
                 if (mod.is("view")) {
                     return init($context, mod, options || {});
                 } else {
                     return lazy.promise($context.append(mod));
                 }
+            };
+            jq.fn.initView = function (mod, options) {
+                var $context = jq(this).parent();
+                var _options = options || {};
+                _options.$$ = this;
+                $context.addView(mod,_options);
             };
             jq.fn.endView = function () {
                 var $view = jq(this);
