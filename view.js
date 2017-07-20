@@ -47,11 +47,17 @@ define({
         }
     };
 
-    var create = function (THIS, options) {
+    var create = function ($context,THIS, options) {
         THIS.__uuid__ = window.getUUID();
         VIEWS[THIS.__uuid__] = THIS;
         var moduleName = (THIS.name).replace(/\./g, "-");
-        var $me = options.$$ ? jq(options.$$) :  jq('<' + TAG_NAME + '>');
+        var $me = null;
+        if(options.$$){
+            $me = jq(options.$$);
+        } else {
+            $me = jq('<' + TAG_NAME + '>');
+            $context.append($me);
+        }
         var moduuleId = options.id || $me.attr("id") ||  ("view-" + viewCounter++ );
         return $me.attr(moduleName, "").attr({
             id : moduuleId,
@@ -60,8 +66,8 @@ define({
     };
 
     var init = function ($context, THIS, options) {
-        THIS.$$ = create(THIS, options);
-        $context.append(THIS.$$.addClass(ANI_ADDING));
+        THIS.$$ = create($context,THIS, options);
+        THIS.$$.addClass(ANI_ADDING);
         var $parent = $context.closest(TAG_NAME);
         bindDomEvents(THIS, THIS.events);
         if ($parent.length > 0) {
@@ -119,7 +125,7 @@ define({
                 var $context = jq(this).parent();
                 var _options = options || {};
                 _options.$$ = this;
-                $context.addView(mod,_options);
+                return $context.addView(mod,_options);
             };
             jq.fn.endView = function () {
                 var $view = jq(this);
