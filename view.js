@@ -115,7 +115,7 @@ define({
         _ready_: function () {
             jq.fn.addView = function (mod, options) {
                 var $context = jq(this);
-                if (mod.is("view")) {
+                if (mod.isParent("view")) {
                     return init($context, mod, options || {});
                 } else {
                     return lazy.promise($context.append(mod));
