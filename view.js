@@ -129,8 +129,8 @@ define({
             };
             jq.fn.endView = function () {
                 var $view = jq(this);
-                if ($view[0].tagName == TAG_NAME && VIEWS[$view[0].id]) {
-                    VIEWS[$view[0].id].end();
+                if ($view[0].tagName == TAG_NAME && VIEWS[$view[0].getAttribute('__uuid__')]) {
+                    VIEWS[$view[0].getAttribute('__uuid__')].endView();
                 } else {
                     $view.remove();
                 }
